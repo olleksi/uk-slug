@@ -1,0 +1,30 @@
+{
+    "name": "olleksi/uk-slug",
+    "description": "Ukrainian transliteration for Flarum discussion slugs",
+    "type": "flarum-extension",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Olleksi",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "flarum/core": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Olleksi\\UkSlug\\": "src/"
+        }
+    },
+    "extra": {
+        "flarum-extension": {
+            "title": "Ukrainian Transliterator",
+            "icon": {
+                "name": "fas fa-language",
+                "backgroundColor": "#0057b7",
+                "color": "#ffd700"
+            }
+        }
+    }
+}
