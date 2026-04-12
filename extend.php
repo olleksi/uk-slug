@@ -3,23 +3,29 @@
 namespace Olleksi\UkSlug;
 
 use Flarum\Extend;
-use Flarum\Discussion\Event\Saving;
+use Flarum\Discussion\Event;
+use Flarum\Discussion\Discussion;
 
 return [
     (new Extend\Event)
-        ->listen(Saving::class, function (Saving $event) {
+        // Flarum 1.x: Використовуємо Saving
+        // Flarum 2.x: Цей клас теж існує, але без $event->data, тому потрібен інший підхід
+        ->listen(Event\Saving::class, function (Event\Saving $event) {
             $discussion = $event->discussion;
             
-            if (!($discussion instanceof \Flarum\Discussion\Discussion)) {
-                return;
+            // Перевіряємо, чи це нова дискусія, або чи змінився заголовок
+            if ($discussion->exists) {
+                // Якщо заголовок не змінився (isDirty працює в обох версіях), виходимо
+                if (!$discussion->isDirty('title')) {
+                    return;
+                }
             }
             
-            if (isset($event->data['attributes']['title'])) {
-                $title = $event->data['attributes']['title'];
-                
-                if (!empty($title)) {
-                    $discussion->slug = Transliterator::transliterate($title);
-                }
+            $title = $discussion->title;
+            
+            if (!empty($title)) {
+                // Тут має бути виклик вашого класу Transliterator
+                $discussion->slug = \Olleksi\UkSlug\Transliterator::transliterate($title);
             }
         }),
 ];
